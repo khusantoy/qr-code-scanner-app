@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_code_scanner_app/ui/screens/home_screen.dart';
-import 'package:qr_code_scanner_app/ui/screens/show_qr_screen.dart';
 import 'package:qr_code_scanner_app/ui/screens/splash_screen.dart';
 import 'package:qr_code_scanner_app/utils/routes.dart';
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:qr_code_scanner_app/ui/screens/show_qr_screen.dart';
 import 'package:qr_code_scanner_app/utils/colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -148,22 +149,33 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       Positioned(
                         top: -45,
-                        child: Container(
-                          padding: const EdgeInsets.all(18),
-                          width: 70.w,
-                          height: 70.h,
-                          decoration: const BoxDecoration(
-                            color: CustomColors.primaryColor,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: CustomColors.primaryColor,
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                              )
-                            ],
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ShowQrScreen(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(18),
+                            width: 70.w,
+                            height: 70.h,
+                            decoration: const BoxDecoration(
+                              color: CustomColors.primaryColor,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: CustomColors.primaryColor,
+                                  spreadRadius: 2,
+                                  blurRadius: 10,
+                                )
+                              ],
+                            ),
+                            child:
+                                SvgPicture.asset("assets/images/scan_qr.svg"),
                           ),
-                          child: SvgPicture.asset("assets/images/scan_qr.svg"),
                         ),
                       ),
                       Align(
