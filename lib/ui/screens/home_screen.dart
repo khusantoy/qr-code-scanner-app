@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:qr_code_scanner_app/ui/screens/show_qr_screen.dart';
 import 'package:qr_code_scanner_app/utils/colors.dart';
+import 'package:qr_code_scanner_app/utils/routes.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,29 +14,34 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final MobileScannerController controller = MobileScannerController(
+    autoStart: false,
+    torchEnabled: false,
+  );
   Barcode? _barcode;
 
-  Widget _buildBarcode(Barcode? value) {
-    if (value == null) {
-      return const Text(
-        'Scan something!',
-        overflow: TextOverflow.fade,
-        style: TextStyle(color: Colors.white),
-      );
-    }
-
-    return Text(
-      value.displayValue ?? 'No display value.',
-      overflow: TextOverflow.fade,
-      style: const TextStyle(color: Colors.white),
-    );
+  @override
+  void initState() {
+    super.initState();
+    controller.start();
   }
 
-  void _handleBarcode(BarcodeCapture barcodes) {
+  void _handleBarcode(BarcodeCapture barcodes) async {
     if (mounted) {
       setState(() {
         _barcode = barcodes.barcodes.firstOrNull;
+        controller.stop();
       });
+    }
+
+    final data = await Navigator.pushNamed(
+      context,
+      AppRoutes.showqr,
+      arguments: {'text': _barcode?.displayValue ?? 'No display value'},
+    );
+
+    if (data as bool) {
+      controller.start();
     }
   }
 
@@ -47,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Stack(
           children: [
             MobileScanner(
+              controller: controller,
               onDetect: _handleBarcode,
             ),
             Align(
@@ -149,33 +155,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       Positioned(
                         top: -45,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ShowQrScreen(),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(18),
-                            width: 70.w,
-                            height: 70.h,
-                            decoration: const BoxDecoration(
-                              color: CustomColors.primaryColor,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: CustomColors.primaryColor,
-                                  spreadRadius: 2,
-                                  blurRadius: 10,
-                                )
-                              ],
-                            ),
-                            child:
-                                SvgPicture.asset("assets/images/scan_qr.svg"),
+                        child: Container(
+                          padding: const EdgeInsets.all(18),
+                          width: 70.w,
+                          height: 70.h,
+                          decoration: const BoxDecoration(
+                            color: CustomColors.primaryColor,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: CustomColors.primaryColor,
+                                spreadRadius: 2,
+                                blurRadius: 10,
+                              )
+                            ],
                           ),
+                          child: SvgPicture.asset("assets/images/scan_qr.svg"),
                         ),
                       ),
                       Align(

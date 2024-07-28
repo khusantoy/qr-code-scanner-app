@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_code_scanner_app/ui/screens/home_screen.dart';
+import 'package:qr_code_scanner_app/ui/screens/show_qr_screen.dart';
 import 'package:qr_code_scanner_app/ui/screens/splash_screen.dart';
 import 'package:qr_code_scanner_app/utils/routes.dart';
 
@@ -25,6 +26,11 @@ class MyApp extends StatelessWidget {
           routes: {
             AppRoutes.splash: (context) => const SplashScreen(),
             AppRoutes.home: (context) => const HomeScreen(),
+            AppRoutes.showqr: (context) {
+              final args = ModalRoute.of(context)?.settings.arguments
+                  as Map<String, dynamic>;
+              return ShowQrScreen(text: args['text']);
+            },
           },
         );
       },
